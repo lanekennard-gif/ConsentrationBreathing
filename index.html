@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moon Breathing Tracker</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", sans-serif;
+  background: radial-gradient(circle at top, #1a1a2e, #000);
+  color: white;
+  text-align: center;
+}
+
+/* Title */
+h1 {
+  margin-top: 20px;
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #cfd8ff;
+  text-shadow: 0 0 10px #7f8cff;
+}
+
+/* Container */
+.container {
+  padding: 15px;
+}
+
+/* Box Grid */
+#boxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 45px);
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.box {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  border: 2px solid #aaa;
+  transition: 0.2s;
+}
+
+/* Filled animation */
+.filled {
+  background: linear-gradient(135deg, #7f8cff, #cfd8ff);
+  box-shadow: 0 0 12px #7f8cff;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+/* Buttons */
+button {
+  background: #111;
+  color: #cfd8ff;
+  border: 1px solid #7f8cff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 6px;
+  font-size: 15px;
+}
+
+button:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 10px #7f8cff;
+}
+
+/* Inputs */
+input[type="number"] {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  width: 120px;
+  text-align: center;
+}
+
+/* Slider */
+input[type="range"] {
+  width: 80%;
+  margin: 10px;
+}
+
+/* Points display */
+.points {
+  font-size: 28px;
+  margin: 10px;
+  color: #cfd8ff;
+  text-shadow: 0 0 10px #7f8cff;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌙 Moon Breathing Tracker</h1>
+
+<div class="container">
+
+<!-- Box Controls -->
+<input type="number" id="boxCount" placeholder="Boxes">
+<button onclick="createBoxes()">Set</button>
+
+<div id="boxes"></div>
+
+<hr>
+
+<!-- Points -->
+<div class="points">Points: <span id="points">60</span></div>
+
+<input type="range" min="0" max="60" value="60" id="slider" oninput="updateSlider()">
+
+<br>
+
+<button onclick="minusSix()">-6 Strike</button>
+<button onclick="resetPoints()">Reset</button>
+
+</div>
+
+<!-- Sound -->
+<audio id="clickSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3">
+</audio>
+
+<script>
+let points = 60;
+
+function playSound() {
+  document.getElementById("clickSound").play();
+}
+
+function createBoxes() {
+  const container = document.getElementById("boxes");
+  container.innerHTML = "";
+  let count = document.getElementById("boxCount").value;
+
+  for (let i = 0; i < count; i++) {
+    let box = document.createElement("div");
+    box.classList.add("box");
+
+    box.onclick = () => {
+      box.classList.toggle("filled");
+      playSound();
+    };
+
+    container.appendChild(box);
+  }
+}
+
+function updateSlider() {
+  points = document.getElementById("slider").value;
+  document.getElementById("points").innerText = points;
+}
+
+function minusSix() {
+  points = Math.max(0, points - 6);
+  document.getElementById("points").innerText = points;
+  document.getElementById("slider").value = points;
+  playSound();
+}
+
+function resetPoints() {
+  points = 60;
+  document.getElementById("points").innerText = points;
+  document.getElementById("slider").value = 60;
+  playSound();
+}
+</script>
+
+</body>
+</html>
